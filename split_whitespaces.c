@@ -14,7 +14,7 @@ int     ft_wordcount(char *str)
     int i = 0;
     int cpt = 0;
 
-    while (ft_isspace(str[i]))
+    while (ft_isspace(str[i]) && str[i])
         str[i++];
     while (str[i])
     {
@@ -31,30 +31,58 @@ int     ft_wordsize(char *str)
 {
     int i = 0;
 
-    while (str)
-    {
-        while (ft_isspace(*str))
-            *str++;
-        while (!ft_isspace(*str))
-        {
-           *str++;
-           i++;
-        }
-    }
+    while (ft_isspace(str[i]) && str[i])
+        str++;
+    while (!ft_isspace(str[i]) && str[i])
+        i++;
     return (i);
 }
 
-//char        **ft_split_whitespaces(*str)
-//{
-//
-//}
+char    **ft_split_whitespaces(char *str)
+{
+    int i = 0;
+    int nb_words = 0;
+    int nb_words_added = 0;
+    char *str_lig;
+    char **str_table;
+
+    printf("Allo1\n");
+    nb_words = ft_wordcount(str);
+    str_table = malloc(sizeof(char*) * (nb_words + 1));
+    while (str && nb_words > nb_words_added)
+    {
+        printf("Allo2\n");
+        str_lig = malloc(sizeof(char) * (ft_wordsize(str) + 1));
+        while (ft_isspace(*str) == 1)
+            str++;
+        printf("Allo3\n");
+        while (str && ft_isspace(*str) == 0)
+            str_lig[i++] = *str++;
+        str_lig[i] = '\0';
+        str_table[nb_words_added++] = str_lig;
+        i = 0;
+    }
+    if (nb_words == 0)
+        str_table[nb_words_added] = 0;
+    str_table[nb_words_added] = 0;
+    printf("Allo4\n");
+    return (str_table);
+}
 
 int     main(int argc, char **argv)
 {
     if (argc != 2)
         return 0;
     
-    int i = ft_wordcount(argv[1]);
-    printf("il y a %d mots", i);
+    int nb;
+    nb = ft_wordsize(argv[1]);
+    printf("%d\n", nb);
+    char **tab = ft_split_whitespaces(argv[1]);
+    int i = 0;
+    while (tab)
+    {
+        printf("%s", tab[i]);
+        i++;
+    }
     return 0;
 }
